@@ -1,0 +1,42 @@
+#Command-Line Arguments: /home/student/hpc26s60/hpc/bcast/./reprompi-dev/build/bin/mpibenchmark --msizes-list=1048576,10485760 --nrep=10 --calls-list=MPI_Bcast
+#MPI calls:
+#	MPI_Bcast
+#Message sizes:
+#	1048576
+#	10485760
+#@operation=MPI_BOR
+#@datatype=MPI_BYTE
+#@datatype_extent_bytes=1
+#@datatype_size_bytes=1
+#@root_proc=0
+#@reproMPIcommitSHA1=d40429c283ca80d541a583f44fcb67901a13086f
+#@nprocs=512
+#@clock=MPI_Wtime
+#@clock_tick=0.0000000010
+#@clocksync=HCA3O
+#@procsync=MPI_Barrier
+#@runtime_type=local
+#@nrep=10
+                                              test       nrep        count    runtime_sec 
+                                         MPI_Bcast          0      1048576   0.0452780870
+                                         MPI_Bcast          1      1048576   0.0498946620
+                                         MPI_Bcast          2      1048576   0.0217903750
+                                         MPI_Bcast          3      1048576   0.0095136270
+                                         MPI_Bcast          4      1048576   0.0061872030
+                                         MPI_Bcast          5      1048576   0.0057549290
+                                         MPI_Bcast          6      1048576   0.0454890420
+                                         MPI_Bcast          7      1048576   0.0050842710
+                                         MPI_Bcast          8      1048576   0.0242960190
+                                         MPI_Bcast          9      1048576   0.0090440080
+                                         MPI_Bcast          0     10485760   0.1467666170
+                                         MPI_Bcast          1     10485760   0.4688705270
+                                         MPI_Bcast          2     10485760   0.0950719260
+                                         MPI_Bcast          3     10485760   1.2921279050
+                                         MPI_Bcast          4     10485760   0.2264040940
+                                         MPI_Bcast          5     10485760   0.1054398210
+                                         MPI_Bcast          6     10485760   0.4835075210
+                                         MPI_Bcast          7     10485760   0.1760812340
+                                         MPI_Bcast          8     10485760   0.0281557600
+                                         MPI_Bcast          9     10485760   0.0951941650
+# Benchmark started at Sun May  3 22:21:52 2026
+# Execution time: 3s

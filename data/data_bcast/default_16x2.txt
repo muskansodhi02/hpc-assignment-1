@@ -1,0 +1,119 @@
+#Command-Line Arguments: /home/student/hpc26s60/hpc/bcast/./reprompi-dev/build/bin/mpibenchmark --msizes-list=1,10,100,1000,10000,100000,1000000,10000000,100000000 --nrep=10 --calls-list=MPI_Bcast
+#MPI calls:
+#	MPI_Bcast
+#Message sizes:
+#	1
+#	10
+#	100
+#	1000
+#	10000
+#	100000
+#	1000000
+#	10000000
+#	100000000
+#@operation=MPI_BOR
+#@datatype=MPI_BYTE
+#@datatype_extent_bytes=1
+#@datatype_size_bytes=1
+#@root_proc=0
+#@reproMPIcommitSHA1=d40429c283ca80d541a583f44fcb67901a13086f
+#@nprocs=32
+#@clock=MPI_Wtime
+#@clock_tick=0.0000000010
+#@clocksync=HCA3O
+#@procsync=MPI_Barrier
+#@runtime_type=local
+#@nrep=10
+                                              test       nrep        count    runtime_sec 
+                                         MPI_Bcast          0            1   0.0000113710
+                                         MPI_Bcast          1            1   0.0000101300
+                                         MPI_Bcast          2            1   0.0000098180
+                                         MPI_Bcast          3            1   0.0000098760
+                                         MPI_Bcast          4            1   0.0000098390
+                                         MPI_Bcast          5            1   0.0000151040
+                                         MPI_Bcast          6            1   0.0000080150
+                                         MPI_Bcast          7            1   0.0000105610
+                                         MPI_Bcast          8            1   0.0000137900
+                                         MPI_Bcast          9            1   0.0000089830
+                                         MPI_Bcast          0           10   0.0000131930
+                                         MPI_Bcast          1           10   0.0000102000
+                                         MPI_Bcast          2           10   0.0000189430
+                                         MPI_Bcast          3           10   0.0000110440
+                                         MPI_Bcast          4           10   0.0000107490
+                                         MPI_Bcast          5           10   0.0000099050
+                                         MPI_Bcast          6           10   0.0000100570
+                                         MPI_Bcast          7           10   0.0000104300
+                                         MPI_Bcast          8           10   0.0000081290
+                                         MPI_Bcast          9           10   0.0000101400
+                                         MPI_Bcast          0          100   0.0000109210
+                                         MPI_Bcast          1          100   0.0000108930
+                                         MPI_Bcast          2          100   0.0000123510
+                                         MPI_Bcast          3          100   0.0000113370
+                                         MPI_Bcast          4          100   0.0000111340
+                                         MPI_Bcast          5          100   0.0000170810
+                                         MPI_Bcast          6          100   0.0000107150
+                                         MPI_Bcast          7          100   0.0000107000
+                                         MPI_Bcast          8          100   0.0000105350
+                                         MPI_Bcast          9          100   0.0000102530
+                                         MPI_Bcast          0         1000   0.0000138630
+                                         MPI_Bcast          1         1000   0.0000114720
+                                         MPI_Bcast          2         1000   0.0000126820
+                                         MPI_Bcast          3         1000   0.0000176520
+                                         MPI_Bcast          4         1000   0.0000119140
+                                         MPI_Bcast          5         1000   0.0000122630
+                                         MPI_Bcast          6         1000   0.0000122020
+                                         MPI_Bcast          7         1000   0.0000118060
+                                         MPI_Bcast          8         1000   0.0000123470
+                                         MPI_Bcast          9         1000   0.0000122280
+                                         MPI_Bcast          0        10000   0.0002711650
+                                         MPI_Bcast          1        10000   0.0000289230
+                                         MPI_Bcast          2        10000   0.0000248860
+                                         MPI_Bcast          3        10000   0.0000211210
+                                         MPI_Bcast          4        10000   0.0000317010
+                                         MPI_Bcast          5        10000   0.0000277820
+                                         MPI_Bcast          6        10000   0.0000245300
+                                         MPI_Bcast          7        10000   0.0000204180
+                                         MPI_Bcast          8        10000   0.0000306730
+                                         MPI_Bcast          9        10000   0.0000271080
+                                         MPI_Bcast          0       100000   0.0005404220
+                                         MPI_Bcast          1       100000   0.0001093440
+                                         MPI_Bcast          2       100000   0.0001065460
+                                         MPI_Bcast          3       100000   0.0001046970
+                                         MPI_Bcast          4       100000   0.0001042490
+                                         MPI_Bcast          5       100000   0.0002745020
+                                         MPI_Bcast          6       100000   0.0001149770
+                                         MPI_Bcast          7       100000   0.0001056990
+                                         MPI_Bcast          8       100000   0.0001042520
+                                         MPI_Bcast          9       100000   0.0001034160
+                                         MPI_Bcast          0      1000000   0.0016887610
+                                         MPI_Bcast          1      1000000   0.0011404280
+                                         MPI_Bcast          2      1000000   0.0011168020
+                                         MPI_Bcast          3      1000000   0.0010984530
+                                         MPI_Bcast          4      1000000   0.0011171260
+                                         MPI_Bcast          5      1000000   0.0010991110
+                                         MPI_Bcast          6      1000000   0.0011197570
+                                         MPI_Bcast          7      1000000   0.0011151820
+                                         MPI_Bcast          8      1000000   0.0011272030
+                                         MPI_Bcast          9      1000000   0.0010899610
+                                         MPI_Bcast          0     10000000   0.0138332170
+                                         MPI_Bcast          1     10000000   0.0113145700
+                                         MPI_Bcast          2     10000000   0.0114856410
+                                         MPI_Bcast          3     10000000   0.0113905380
+                                         MPI_Bcast          4     10000000   0.0115353570
+                                         MPI_Bcast          5     10000000   0.0114330960
+                                         MPI_Bcast          6     10000000   0.0113360370
+                                         MPI_Bcast          7     10000000   0.0115354570
+                                         MPI_Bcast          8     10000000   0.0114157630
+                                         MPI_Bcast          9     10000000   0.0671813190
+                                         MPI_Bcast          0    100000000   0.1321028920
+                                         MPI_Bcast          1    100000000   0.1224321760
+                                         MPI_Bcast          2    100000000   0.1218009660
+                                         MPI_Bcast          3    100000000   0.1222450630
+                                         MPI_Bcast          4    100000000   0.1216465930
+                                         MPI_Bcast          5    100000000   0.1338775580
+                                         MPI_Bcast          6    100000000   0.1274540290
+                                         MPI_Bcast          7    100000000   0.1213085560
+                                         MPI_Bcast          8    100000000   0.1221980190
+                                         MPI_Bcast          9    100000000   0.1215811070
+# Benchmark started at Sun May  3 22:16:21 2026
+# Execution time: 1s

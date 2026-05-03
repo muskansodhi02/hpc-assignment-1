@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/bcast_test.dir/src/bcast_test.cc.o -o bin/bcast_test  -Wl,-rpath,/usr/lib/x86_64-linux-gnu/openmpi/lib /usr/lib/x86_64-linux-gnu/openmpi/lib/libmpi_cxx.so /usr/lib/x86_64-linux-gnu/openmpi/lib/libmpi.so 

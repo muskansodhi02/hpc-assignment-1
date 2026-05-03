@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -shared -Wl,-soname,libbcast_knomial.so -o libbcast_knomial.so CMakeFiles/bcast_knomial.dir/src/bcast_knomial.cc.o  -Wl,-rpath,/usr/lib/x86_64-linux-gnu/openmpi/lib /usr/lib/x86_64-linux-gnu/openmpi/lib/libmpi_cxx.so /usr/lib/x86_64-linux-gnu/openmpi/lib/libmpi.so 
