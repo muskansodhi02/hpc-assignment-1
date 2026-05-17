@@ -8,33 +8,34 @@ def parse_lscpu(file):
     with open(file) as f:
         text = f.read()
 
-    # logical cores (used for peak performance)
-    cores = int(re.search(r"CPU\(s\):\s+(\d+)", text).group(1))
 
-    # physical cores 
-    physical_cores_match = re.search(r"Core\(s\) per socket:\s+(\d+)", text)
+    # physical cores  = sockets × cores per socket   
+    sockets = int(re.search(r"Socket\(s\):\s+(\d+)", text).group(1))
+    cores_per_socket = int(re.search(r"Core\(s\) per socket:\s+(\d+)", text).group(1))
 
-    if physical_cores_match:
-        physical_cores = int(physical_cores_match.group(1))
-    else:
-        physical_cores = cores
+    physical_cores = sockets * cores_per_socket
 
     # detect AVX level and compute FLOPs/cycle
+    # NOTE: derived from SIMD width + FMA units
     flags = text.lower()
 
     if "avx512" in flags:
+        # 512-bit SIMD = 8 doubles per vector
+        # 2 FLOPs per FMA × 2 FMA units (Skylake-SP model)
         flops_per_cycle = 32
-        instruction_set = "AVX-512"
+        instruction_set = "AVX-512 (8 doubles × 2 FLOPs × 2 FMA units)"
 
     elif "avx2" in flags:
+        # 256-bit SIMD = 4 doubles per vector
+        # 2 FLOPs per FMA × 2 FMA units
         flops_per_cycle = 16
-        instruction_set = "AVX2"
+        instruction_set = "AVX2 (4 doubles × 2 FLOPs × 2 FMA units)"
 
     else:
         flops_per_cycle = 8
-        instruction_set = "SSE/Other"
+        instruction_set = "SSE/Other (fallback model)"
 
-    return cores, flops_per_cycle, instruction_set
+    return physical_cores, flops_per_cycle, instruction_set
 
 
 # Parse BabelStream output 
@@ -53,8 +54,8 @@ def parse_babel(file):
 
 # Frequency values for each machine (in MHz)
 FREQS = {
-    "Laptop": 2300,   # MHz (base frequency)
-    "Hydra": 2100     # MHz (Xeon base frequency)
+    "Laptop": 2300,   # 2.30 GHz sustained turbo frequency (from lscpu)
+    "Hydra": 2100     # 2.10 GHz base all-core frequency (from lscpu)
 }
 
 
@@ -65,7 +66,6 @@ def compute_peak_gflops(cores, freq_mhz, flops_per_cycle):
     # convert MHz → GHz
     freq_ghz = freq_mhz / 1000.0
 
-    # Roofline peak performance model
     return cores * freq_ghz * flops_per_cycle
 
 
@@ -92,24 +92,22 @@ for name, (cpu_file, babel_file) in machines.items():
     cores, flops, instruction_set = parse_lscpu(cpu_file)
 
     # Convert MB/s → GB/s
-    bw = parse_babel(babel_file) / 1000.0
+    bw = parse_babel(babel_file) / 1e3
 
     # theoretical compute roof
     gflops = compute_peak_gflops(cores, FREQS[name], flops)
 
     results[name] = (bw, gflops)
 
-    
-    print(f"{name} Roofline Parameters:")
-  
+    print(f"{name} Roofline Parameters===============================")
 
-    print(f"Logical cores       : {cores}")
+    print(f"Physical cores      : {cores}")
     print(f"Frequency (MHz)     : {FREQS[name]}")
     print(f"Instruction set     : {instruction_set}")
-    print(f"FLOPs/cycle         : {flops}")
+    print(f"FLOPs/cycle model   : {flops}")
 
     print("\nTheoretical Peak GFLOP/s Calculation:")
-    print(f"GFLOP/s = {cores} × ({FREQS[name]}/1000) × {flops}")
+    print(f"GFLOP/s = {cores} × ({FREQS[name]}/1e3) × {flops}")
 
     print(f"Peak Compute Roof   : {gflops:.2f} GFLOP/s")
     print(f"Memory Bandwidth    : {bw:.2f} GB/s")
@@ -126,15 +124,15 @@ def plot(name, bw, gflops):
     plt.figure(figsize=(8, 6))
 
     # memory roof
-    plt.loglog(ai, memory_perf, label="Memory Bandwidth Roof", color="blue")
+    plt.loglog(ai, memory_perf, color="blue", label="Memory Bandwidth Roof")
 
     # compute roof 
-    plt.loglog(ai, [gflops] * len(ai), label="Compute Roof", color="red")
+    plt.loglog(ai, [gflops] * len(ai), color="red", label="Compute Roof")
 
-    # ridge point (where memory and compute roofs intersect)
+    # ridge point
     ridge_ai = gflops / bw if bw > 0 else 0
 
-    plt.scatter([ridge_ai], [gflops], color="green", label="Ridge Point")
+    plt.scatter([ridge_ai], [gflops], color="black", s=100, label="Ridge Point")
 
     plt.title(f"Roofline Model - {name}")
     plt.xlabel("Arithmetic Intensity (FLOPs/Byte)")
@@ -150,7 +148,7 @@ for name in results:
     plot(name, *results[name])
 
 
-# Comparison plot of two machines:
+# Comparison plot:
 
 machine_names = list(results.keys())
 
@@ -161,8 +159,8 @@ x = range(len(machine_names))
 
 plt.figure(figsize=(8, 6))
 
-plt.bar([i - 0.2 for i in x], bandwidths, width=0.4, label="Memory Bandwidth (GB/s)")
-plt.bar([i + 0.2 for i in x], gflops_values, width=0.4, label="Peak GFLOP/s")
+plt.bar([i - 0.2 for i in x], bandwidths, width=0.4, color="green", label="Memory Bandwidth (GB/s)")
+plt.bar([i + 0.2 for i in x], gflops_values, width=0.4, color="red", label="Peak GFLOP/s")
 
 plt.xticks(x, machine_names)
 plt.ylabel("Performance")
@@ -170,4 +168,5 @@ plt.title("Comparison of Laptop and Hydra")
 
 plt.legend()
 plt.grid(True)
+
 plt.show()
