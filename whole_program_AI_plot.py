@@ -1,145 +1,139 @@
-import re
 import os
+import re
 import matplotlib.pyplot as plt
 
+# -------------------------------
+# Roofline parameters (Ex 1)
+# -------------------------------
+PEAK_GFLOPS = 2150.40   # Hydra compute peak
+MEM_BW = 95.15          # GB/s
 
-# Hydra Roofline params from Ex 1
-HYDRA_BW = 72.99       # GB/s
-HYDRA_GFLOPS = 1075.2  # GFLOP/s
+RESULT_DIR = "Whole_program_AI_LIKWID_results"
 
+# -------------------------------
+# Extract FLOPS + MEM + AI + PERF
+# -------------------------------
+def parse_file(filepath):
+    results = []
 
-RESULT_DIR = "results"
+    with open(filepath, "r") as f:
+        content = f.read()
 
+    # Split runs
+    blocks = content.split("Iterations=")
 
-# -----------------------------
-# PARSERS (FIXED FOR LIKWID)
-# -----------------------------
+    for b in blocks[1:]:
+        try:
+            it_match = re.search(r"Iterations=(\d+)", "Iterations=" + b)
+            th_match = re.search(r"Threads=(\d+)", b)
 
-def extract_flops(file_path):
-    with open(file_path, "r") as f:
-        text = f.read()
+            # LIKWID values
+            flops_match = re.search(r"DP \[MFLOP/s\][^\n]*([\d\.]+)", b)
+            mem_match = re.search(r"Memory bandwidth[^\n]*([\d\.]+)", b)
 
-    # LIKWID format:
-    # Rate (MFlops/s): XXXX
-    match = re.search(r"Rate\s+\(MFlops/s\):\s+([0-9]+\.[0-9]+)", text)
+            if not (it_match and th_match and flops_match and mem_match):
+                continue
 
-    if match:
-        return float(match.group(1)) / 1000.0  # GFLOP/s
+            it = int(it_match.group(1))
+            th = int(th_match.group(1))
 
-    return None
+            flops = float(flops_match.group(1))   # MFLOP/s
+            mem = float(mem_match.group(1))       # GB/s
 
+            # Convert units
+            flops_g = flops / 1000.0  # GFLOP/s
 
-def extract_memory(file_path):
-    with open(file_path, "r") as f:
-        text = f.read()
+            # -------------------------------
+            # Roofline values
+            # -------------------------------
+            ai = flops_g / mem if mem > 0 else 0.0   # FLOP/byte
+            perf = flops_g                           # GFLOP/s
 
-    # LIKWID format:
-    # Memory bandwidth [MBytes/s] XXXX
-    match = re.search(r"Memory bandwidth\s+\[MBytes/s\]\s+([0-9]+\.[0-9]+)", text)
+            results.append((it, th, ai, perf))
 
-    if match:
-        return float(match.group(1)) / 1000.0  # GB/s
-
-    return None
-
-
-# -----------------------------
-# AI COMPUTATION
-# -----------------------------
-
-def compute_ai(flops_gflops, mem_gbs):
-    if flops_gflops is None or mem_gbs is None:
-        return None
-    return flops_gflops / mem_gbs
-
-
-# -----------------------------
-# ROOFLINE PLOT
-# -----------------------------
-
-def roofline_plot(stencil_type, dimension, data_points):
-
-    plt.figure(figsize=(9, 7))
-
-    ai_range = [0.01, 0.1, 1, 10, 100]
-
-    # memory roof
-    mem_roof = [HYDRA_BW * x for x in ai_range]
-    plt.loglog(ai_range, mem_roof, label="Memory Bandwidth Roof")
-
-    # compute roof
-    plt.loglog(ai_range, [HYDRA_GFLOPS] * len(ai_range),
-               label="Compute Roof")
-
-    markers = {2: "o", 16: "s", 32: "^"}
-    colors = {2: "blue", 10: "red"}
-
-    for p in data_points:
-
-        if p["ai"] is None:
+        except:
             continue
 
-        plt.scatter(
-            p["ai"],
-            p["performance"],
-            marker=markers[p["threads"]],
-            color=colors[p["iterations"]],
-            s=120,
-            label=f"t={p['threads']}, it={p['iterations']}"
+    return results
+
+
+# -------------------------------
+# Roofline curve
+# -------------------------------
+def plot_roofline(ax, title):
+    import numpy as np
+
+    x = np.logspace(-3, 2, 200)
+    y = np.minimum(PEAK_GFLOPS, MEM_BW * x)
+
+    ax.loglog(x, y, label="Roofline", linewidth=2)
+    ax.set_title(title)
+    ax.set_xlabel("Arithmetic Intensity (FLOP/Byte)")
+    ax.set_ylabel("Performance (GFLOP/s)")
+    ax.grid(True, which="both")
+
+
+# -------------------------------
+# Load files
+# -------------------------------
+files = [f for f in os.listdir(RESULT_DIR) if f.endswith(".txt")]
+
+data_map = {
+    "STAR_N1000": [],
+    "STAR_N50000": [],
+    "COMPACT_N1000": [],
+    "COMPACT_N50000": []
+}
+
+for f in files:
+    path = os.path.join(RESULT_DIR, f)
+    data = parse_file(path)
+
+    if "STAR_N1000" in f:
+        data_map["STAR_N1000"] = data
+    elif "STAR_N50000" in f:
+        data_map["STAR_N50000"] = data
+    elif "COMPACT_N1000" in f:
+        data_map["COMPACT_N1000"] = data
+    elif "COMPACT_N50000" in f:
+        data_map["COMPACT_N50000"] = data
+
+
+# -------------------------------
+# Plot setup
+# -------------------------------
+fig, axs = plt.subplots(2, 2, figsize=(12, 10))
+
+plots = {
+    (0,0): "STAR_N1000",
+    (0,1): "STAR_N50000",
+    (1,0): "COMPACT_N1000",
+    (1,1): "COMPACT_N50000"
+}
+
+colors = {2: "red", 16: "green", 32: "blue"}
+
+# -------------------------------
+# Draw plots
+# -------------------------------
+for (i, j), key in plots.items():
+
+    ax = axs[i, j]
+    plot_roofline(ax, key)
+
+    for it, th, ai, perf in data_map[key]:
+        ax.scatter(
+            ai,
+            perf,
+            color=colors.get(th, "black"),
+            label=f"it={it}, t={th}"
         )
 
     # remove duplicate legend entries
-    handles, labels = plt.gca().get_legend_handles_labels()
-    unique = dict(zip(labels, handles))
-    plt.legend(unique.values(), unique.keys())
-
-    plt.xlabel("Arithmetic Intensity (FLOPs/Byte)")
-    plt.ylabel("Performance (GFLOP/s)")
-    plt.title(f"{stencil_type} stencil - {dimension}")
-    plt.grid(True, which="both")
-
-    plt.show()
+    handles, labels = ax.get_legend_handles_labels()
+    by_label = dict(zip(labels, handles))
+    ax.legend(by_label.values(), by_label.keys(), fontsize=8)
 
 
-# -----------------------------
-# MAIN LOOP
-# -----------------------------
-
-dimensions = [1000, 50000]
-stencils = ["star", "compact"]
-iterations_list = [2, 10]
-threads_list = [2, 16, 32]
-
-
-for stencil in stencils:
-    for dim in dimensions:
-
-        data_points = []
-
-        for it in iterations_list:
-            for th in threads_list:
-
-                flops_file = f"{RESULT_DIR}/{stencil}_d{dim}_i{it}_t{th}_flops.txt"
-                mem_file = f"{RESULT_DIR}/{stencil}_d{dim}_i{it}_t{th}_mem.txt"
-
-                if not os.path.exists(flops_file) or not os.path.exists(mem_file):
-                    continue
-
-                flops = extract_flops(flops_file)
-                mem = extract_memory(mem_file)
-
-                ai = compute_ai(flops, mem)
-
-                data_points.append({
-                    "ai": ai,
-                    "performance": flops,
-                    "threads": th,
-                    "iterations": it
-                })
-
-                print(f"\n{stencil} dim={dim} it={it} t={th}")
-                print(f"FLOPs (GFLOP/s): {flops}")
-                print(f"Mem  (GB/s):     {mem}")
-                print(f"AI:              {ai}")
-
-        roofline_plot(stencil, dim, data_points)
+plt.tight_layout()
+plt.show()
