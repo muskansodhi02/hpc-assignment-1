@@ -63,10 +63,10 @@ do
                 echo "-------------------------------------" >> $OUTFILE
 
                 echo "[FLOPS_DP]" >> $OUTFILE
-                likwid-perfctr -C 0-31 -g FLOPS_DP ./stencil $T $IT $N >> $OUTFILE
+                likwid-perfctr -O -C 0-31 -g FLOPS_DP ./stencil $T $IT $N >> $OUTFILE
 
                 echo "[MEM]" >> $OUTFILE
-                likwid-perfctr -C 0-31 -g MEM ./stencil $T $IT $N >> $OUTFILE
+                likwid-perfctr -O -C 0-31 -g MEM ./stencil $T $IT $N >> $OUTFILE
 
             done
         done

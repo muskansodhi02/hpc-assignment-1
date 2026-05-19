@@ -7,6 +7,11 @@ import matplotlib.pyplot as plt
 # Configuration & Infrastructure Parameters (From Exercise 1)
 
 RESULT_DIR = "Whole_program_AI_LIKWID_results"
+PLOT_OUTPUT_DIR = "Whole_Program_AI_plots"
+
+# Ensure the output directory for plots exists before execution
+if not os.path.exists(PLOT_OUTPUT_DIR):
+    os.makedirs(PLOT_OUTPUT_DIR)
 
 # Hydra Cluster Node Specifications
 HYDRA_MEM_BANDWIDTH = 95.15   # GB/s
@@ -219,8 +224,8 @@ for filename, configurations in all_data.items():
     # Placing legend with high contrast outline
     plt.legend(loc='upper left', fontsize=9, framealpha=0.9, facecolor='white', edgecolor='gray')
     
-    # Save the output chart files
-    out_img_name = f"roofline_{filename.replace('.txt', '')}.png"
+    # Save the output chart files inside the designated directory
+    out_img_name = os.path.join(PLOT_OUTPUT_DIR, f"Whole_program_AI_{filename.replace('.txt', '')}.png")
     plt.tight_layout()
     plt.savefig(out_img_name, dpi=150)
     print(f"Generated Plot Asset successfully saved as: [ {out_img_name} ]")

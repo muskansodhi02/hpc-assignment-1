@@ -1,0 +1,184 @@
+
+-------------------------------------
+Iterations=10 Threads=2
+-------------------------------------
+[FLOPS_DP]
+--------------------------------------------------------------------------------
+CPU name:	Intel(R) Xeon(R) Gold 6130F CPU @ 2.10GHz
+CPU type:	Intel Skylake SP processor
+CPU clock:	2.09 GHz
+--------------------------------------------------------------------------------
+Parallel Research Kernels version 2.17
+OpenMP stencil execution on 2D grid
+Number of threads    = 2
+Grid size            = 50000
+Radius of stencil    = 2
+Number of iterations = 10
+Type of stencil      = compact
+Data type            = double precision
+No aliasing          = off
+Compact representation of stencil loop body
+Parallel regions     = fused (omp for)
+Solution validates
+Rate (MFlops/s): 4625.560789  Avg time (s): 27.559815
+--------------------------------------------------------------------------------
+Region stencil_kernel, Group 1: FLOPS_DP
++-------------------+------------+------------+
+|    Region Info    | HWThread 0 | HWThread 1 |
++-------------------+------------+------------+
+| RDTSC Runtime [s] | 265.800400 | 265.800300 |
+|     call count    |         10 |         10 |
++-------------------+------------+------------+
+
++------------------------------------------+---------+--------------+--------------+
+|                   Event                  | Counter |  HWThread 0  |  HWThread 1  |
++------------------------------------------+---------+--------------+--------------+
+|             INSTR_RETIRED_ANY            |  FIXC0  | 756181000000 | 756190700000 |
+|           CPU_CLK_UNHALTED_CORE          |  FIXC1  | 554729900000 | 555223400000 |
+|           CPU_CLK_UNHALTED_REF           |  FIXC2  | 554734900000 | 555226700000 |
+| FP_ARITH_INST_RETIRED_128B_PACKED_DOUBLE |   PMC0  | 312450000000 | 312450000000 |
+|    FP_ARITH_INST_RETIRED_SCALAR_DOUBLE   |   PMC1  |          110 |          110 |
+| FP_ARITH_INST_RETIRED_256B_PACKED_DOUBLE |   PMC2  |            0 |            0 |
+| FP_ARITH_INST_RETIRED_512B_PACKED_DOUBLE |   PMC3  |            0 |            0 |
++------------------------------------------+---------+--------------+--------------+
+
++-----------------------------------------------+---------+---------------+--------------+--------------+--------------+
+|                     Event                     | Counter |      Sum      |      Min     |      Max     |      Avg     |
++-----------------------------------------------+---------+---------------+--------------+--------------+--------------+
+|             INSTR_RETIRED_ANY STAT            |  FIXC0  | 1512371700000 | 756181000000 | 756190700000 | 756185850000 |
+|           CPU_CLK_UNHALTED_CORE STAT          |  FIXC1  | 1109953300000 | 554729900000 | 555223400000 | 554976650000 |
+|           CPU_CLK_UNHALTED_REF STAT           |  FIXC2  | 1109961600000 | 554734900000 | 555226700000 | 554980800000 |
+| FP_ARITH_INST_RETIRED_128B_PACKED_DOUBLE STAT |   PMC0  |  624900000000 | 312450000000 | 312450000000 | 312450000000 |
+|    FP_ARITH_INST_RETIRED_SCALAR_DOUBLE STAT   |   PMC1  |           220 |          110 |          110 |          110 |
+| FP_ARITH_INST_RETIRED_256B_PACKED_DOUBLE STAT |   PMC2  |             0 |            0 |            0 |            0 |
+| FP_ARITH_INST_RETIRED_512B_PACKED_DOUBLE STAT |   PMC3  |             0 |            0 |            0 |            0 |
++-----------------------------------------------+---------+---------------+--------------+--------------+--------------+
+
++----------------------+--------------+--------------+
+|        Metric        |  HWThread 0  |  HWThread 1  |
++----------------------+--------------+--------------+
+|  Runtime (RDTSC) [s] |     265.8004 |     265.8003 |
+| Runtime unhalted [s] |     264.7921 |     265.0277 |
+|      Clock [MHz]     |    2094.9448 |    2094.9512 |
+|          CPI         |       0.7336 |       0.7342 |
+|     DP [MFLOP/s]     |    2351.0123 |    2351.0131 |
+|   AVX DP [MFLOP/s]   |            0 |            0 |
+|  AVX512 DP [MFLOP/s] |            0 |            0 |
+|   Packed [MUOPS/s]   |    1175.5061 |    1175.5066 |
+|   Scalar [MUOPS/s]   | 4.138444e-07 | 4.138445e-07 |
+|  Vectorization ratio |     100.0000 |     100.0000 |
++----------------------+--------------+--------------+
+
++---------------------------+--------------+--------------+--------------+--------------+
+|           Metric          |      Sum     |      Min     |      Max     |      Avg     |
++---------------------------+--------------+--------------+--------------+--------------+
+|  Runtime (RDTSC) [s] STAT |     531.6007 |     265.8003 |     265.8004 |     265.8003 |
+| Runtime unhalted [s] STAT |     529.8198 |     264.7921 |     265.0277 |     264.9099 |
+|      Clock [MHz] STAT     |    4189.8960 |    2094.9448 |    2094.9512 |    2094.9480 |
+|          CPI STAT         |       1.4678 |       0.7336 |       0.7342 |       0.7339 |
+|     DP [MFLOP/s] STAT     |    4702.0254 |    2351.0123 |    2351.0131 |    2351.0127 |
+|   AVX DP [MFLOP/s] STAT   |            0 |            0 |            0 |            0 |
+|  AVX512 DP [MFLOP/s] STAT |            0 |            0 |            0 |            0 |
+|   Packed [MUOPS/s] STAT   |    2351.0127 |    1175.5061 |    1175.5066 |    1175.5064 |
+|   Scalar [MUOPS/s] STAT   | 8.276889e-07 | 4.138444e-07 | 4.138445e-07 | 4.138445e-07 |
+|  Vectorization ratio STAT |          200 |          100 |          100 |          100 |
++---------------------------+--------------+--------------+--------------+--------------+
+
+[MEM]
+--------------------------------------------------------------------------------
+CPU name:	Intel(R) Xeon(R) Gold 6130F CPU @ 2.10GHz
+CPU type:	Intel Skylake SP processor
+CPU clock:	2.10 GHz
+--------------------------------------------------------------------------------
+Parallel Research Kernels version 2.17
+OpenMP stencil execution on 2D grid
+Number of threads    = 2
+Grid size            = 50000
+Radius of stencil    = 2
+Number of iterations = 10
+Type of stencil      = compact
+Data type            = double precision
+No aliasing          = off
+Compact representation of stencil loop body
+Parallel regions     = fused (omp for)
+Solution validates
+Rate (MFlops/s): 4625.683037  Avg time (s): 27.559087
+--------------------------------------------------------------------------------
+Region stencil_kernel, Group 1: MEM
++-------------------+------------+------------+
+|    Region Info    | HWThread 0 | HWThread 1 |
++-------------------+------------+------------+
+| RDTSC Runtime [s] | 265.809900 | 265.810100 |
+|     call count    |         10 |         10 |
++-------------------+------------+------------+
+
++-----------------------+---------+--------------+--------------+
+|         Event         | Counter |  HWThread 0  |  HWThread 1  |
++-----------------------+---------+--------------+--------------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 756181600000 | 756186700000 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  | 554671200000 | 555199700000 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 554676600000 | 555202900000 |
+|      CAS_COUNT_RD     | MBOX0C0 |    530286900 |    534139500 |
+|      CAS_COUNT_WR     | MBOX0C1 |    263249900 |    262352900 |
+|      CAS_COUNT_RD     | MBOX1C0 |    530028000 |    534768100 |
+|      CAS_COUNT_WR     | MBOX1C1 |    262999200 |    262802400 |
+|      CAS_COUNT_RD     | MBOX2C0 |    530458400 |    534914200 |
+|      CAS_COUNT_WR     | MBOX2C1 |    263695100 |    263221600 |
+|      CAS_COUNT_RD     | MBOX3C0 |    530123200 |    534692400 |
+|      CAS_COUNT_WR     | MBOX3C1 |    263133200 |    262762300 |
+|      CAS_COUNT_RD     | MBOX4C0 |    530366800 |    536182900 |
+|      CAS_COUNT_WR     | MBOX4C1 |    263246300 |    264256300 |
+|      CAS_COUNT_RD     | MBOX5C0 |    530292400 |    534650500 |
+|      CAS_COUNT_WR     | MBOX5C1 |    263071500 |    262462500 |
++-----------------------+---------+--------------+--------------+
+
++----------------------------+---------+---------------+--------------+--------------+--------------+
+|            Event           | Counter |      Sum      |      Min     |      Max     |      Avg     |
++----------------------------+---------+---------------+--------------+--------------+--------------+
+|   INSTR_RETIRED_ANY STAT   |  FIXC0  | 1512368300000 | 756181600000 | 756186700000 | 756184150000 |
+| CPU_CLK_UNHALTED_CORE STAT |  FIXC1  | 1109870900000 | 554671200000 | 555199700000 | 554935450000 |
+|  CPU_CLK_UNHALTED_REF STAT |  FIXC2  | 1109879500000 | 554676600000 | 555202900000 | 554939750000 |
+|      CAS_COUNT_RD STAT     | MBOX0C0 |    1064426400 |    530286900 |    534139500 |    532213200 |
+|      CAS_COUNT_WR STAT     | MBOX0C1 |     525602800 |    262352900 |    263249900 |    262801400 |
+|      CAS_COUNT_RD STAT     | MBOX1C0 |    1064796100 |    530028000 |    534768100 |    532398050 |
+|      CAS_COUNT_WR STAT     | MBOX1C1 |     525801600 |    262802400 |    262999200 |    262900800 |
+|      CAS_COUNT_RD STAT     | MBOX2C0 |    1065372600 |    530458400 |    534914200 |    532686300 |
+|      CAS_COUNT_WR STAT     | MBOX2C1 |     526916700 |    263221600 |    263695100 |    263458350 |
+|      CAS_COUNT_RD STAT     | MBOX3C0 |    1064815600 |    530123200 |    534692400 |    532407800 |
+|      CAS_COUNT_WR STAT     | MBOX3C1 |     525895500 |    262762300 |    263133200 |    262947750 |
+|      CAS_COUNT_RD STAT     | MBOX4C0 |    1066549700 |    530366800 |    536182900 |    533274850 |
+|      CAS_COUNT_WR STAT     | MBOX4C1 |     527502600 |    263246300 |    264256300 |    263751300 |
+|      CAS_COUNT_RD STAT     | MBOX5C0 |    1064942900 |    530292400 |    534650500 |    532471450 |
+|      CAS_COUNT_WR STAT     | MBOX5C1 |     525534000 |    262462500 |    263071500 |    262767000 |
++----------------------------+---------+---------------+--------------+--------------+--------------+
+
++-----------------------------------+------------+------------+
+|               Metric              | HWThread 0 | HWThread 1 |
++-----------------------------------+------------+------------+
+|        Runtime (RDTSC) [s]        |   265.8099 |   265.8101 |
+|        Runtime unhalted [s]       |   264.7502 |   265.0024 |
+|            Clock [MHz]            |  2095.0535 |  2095.0619 |
+|                CPI                |     0.7335 |     0.7342 |
+|  Memory read bandwidth [MBytes/s] |   766.0345 |   772.7255 |
+|  Memory read data volume [GBytes] |   203.6196 |   205.3982 |
+| Memory write bandwidth [MBytes/s] |   380.2766 |   379.9062 |
+| Memory write data volume [GBytes] |   101.0813 |   100.9829 |
+|    Memory bandwidth [MBytes/s]    |  1146.3112 |  1152.6317 |
+|    Memory data volume [GBytes]    |   304.7009 |   306.3812 |
++-----------------------------------+------------+------------+
+
++----------------------------------------+-----------+-----------+-----------+-----------+
+|                 Metric                 |    Sum    |    Min    |    Max    |    Avg    |
++----------------------------------------+-----------+-----------+-----------+-----------+
+|        Runtime (RDTSC) [s] STAT        |  531.6200 |  265.8099 |  265.8101 |  265.8100 |
+|        Runtime unhalted [s] STAT       |  529.7526 |  264.7502 |  265.0024 |  264.8763 |
+|            Clock [MHz] STAT            | 4190.1154 | 2095.0535 | 2095.0619 | 2095.0577 |
+|                CPI STAT                |    1.4677 |    0.7335 |    0.7342 |    0.7339 |
+|  Memory read bandwidth [MBytes/s] STAT | 1538.7600 |  766.0345 |  772.7255 |  769.3800 |
+|  Memory read data volume [GBytes] STAT |  409.0178 |  203.6196 |  205.3982 |  204.5089 |
+| Memory write bandwidth [MBytes/s] STAT |  760.1828 |  379.9062 |  380.2766 |  380.0914 |
+| Memory write data volume [GBytes] STAT |  202.0642 |  100.9829 |  101.0813 |  101.0321 |
+|    Memory bandwidth [MBytes/s] STAT    | 2298.9429 | 1146.3112 | 1152.6317 | 1149.4715 |
+|    Memory data volume [GBytes] STAT    |  611.0821 |  304.7009 |  306.3812 |  305.5410 |
++----------------------------------------+-----------+-----------+-----------+-----------+
+
